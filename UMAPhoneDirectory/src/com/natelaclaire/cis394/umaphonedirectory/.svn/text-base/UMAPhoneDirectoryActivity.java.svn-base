@@ -1,0 +1,93 @@
+package com.natelaclaire.cis394.umaphonedirectory;
+
+import java.util.ArrayList;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.Button;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
+
+/**
+ * The Activity is similar to an application class in a standard Java application.
+ * @author Nate
+ *
+ */
+public class UMAPhoneDirectoryActivity extends Activity {
+    private ListView contactList; // the graphical list
+    private Button dialButton; // the button at the top of the app
+    private ArrayList<PhoneEntry> entries; // the list data
+    private PhoneListAdapter adapter; // used by the ListView to determine how to present the data
+    
+    /**
+     * Called when the activity is first created.
+     * @param a Bundle providing information about the state of the app when Android last closed it. I don't see a current need for this in my app.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState); // call the superclass's onCreate method
+        setContentView(R.layout.main); // the View for this Activity is main.xml
+        
+        // attempt to download an XML file containing the phone entries and parse it,
+        // storing the result in an ArrayList<PhoneEntry> object
+        try {
+        	XMLParser parser = new XMLParser("http://natelaclaire.com/play/phoneEntries.xml");
+        	entries = parser.parse();
+        } catch(Exception e) {
+        	// if the download is unsuccessful or the file is unable to be parsed, 
+        	// we'll use stale data
+        	entries = new ArrayList<PhoneEntry>(10);
+        	entries.add(new PhoneEntry("Information Center", "8778621234"));
+            entries.add(new PhoneEntry("Advising - Augusta (Academic & Career)", "2076213149"));
+            entries.add(new PhoneEntry("Advising - Bangor (Academic)", "2072627808"));
+            entries.add(new PhoneEntry("Advising - Bangor (Career)", "2072627817"));
+            entries.add(new PhoneEntry("Bookstore", "8006210083"));
+            entries.add(new PhoneEntry("Computer Services", "8888675434"));
+            entries.add(new PhoneEntry("Cornerstone - Augusta", "2076213157"));
+            entries.add(new PhoneEntry("Cornerstone - Bangor", "2072627820"));
+            entries.add(new PhoneEntry("Financial Aid", "2076213185"));
+            entries.add(new PhoneEntry("Katz Library", "2076213349"));
+            
+            // since this is still in a beginning state, we'll also spit out 
+            // whatever error message we receive
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        	builder.setMessage(e.getMessage());
+        	AlertDialog alert = builder.create();
+        	alert.show();
+        }
+        
+        // define how the button will behave
+        dialButton = (Button) findViewById(R.id.button);
+        dialButton.setOnClickListener(new OnClickListener() {
+        	@Override
+        	public void onClick(View v) {
+        		// when clicked, we'll instantiate an Intent with an action that
+        		// causes the dialer to call the university's main number
+        		Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:8778621234"));
+            	startActivity(dialIntent); // then we start the activity describe in the Intent
+        	}
+        });
+        
+        // set up the list of contacts and define how the list will behave
+        contactList = (ListView) findViewById(R.id.contact_list);
+        adapter = new PhoneListAdapter(entries, this);
+    	contactList.setAdapter(adapter);
+    	contactList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// when an item in the list is clicked, we'll get the phone number associated
+				// with the position in the list where the click (or tap) occurred and dial it
+				Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + adapter.getItem(position).getNumber()));
+		    	startActivity(dialIntent);
+			}
+    		
+    	});
+    }
+}

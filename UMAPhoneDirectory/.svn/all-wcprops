@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/UMAPhoneDirectory/!svn/ver/1/UMAPhoneDirectory
+END
+default.properties
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/UMAPhoneDirectory/!svn/ver/2/UMAPhoneDirectory/default.properties
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/UMAPhoneDirectory/!svn/ver/2/UMAPhoneDirectory/.classpath
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/UMAPhoneDirectory/!svn/ver/2/UMAPhoneDirectory/.project
+END
+AndroidManifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/UMAPhoneDirectory/!svn/ver/2/UMAPhoneDirectory/AndroidManifest.xml
+END
