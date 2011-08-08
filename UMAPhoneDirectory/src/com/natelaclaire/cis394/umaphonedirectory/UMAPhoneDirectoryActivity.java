@@ -20,7 +20,6 @@ import android.widget.ListView;
  */
 public class UMAPhoneDirectoryActivity extends Activity {
     private ListView contactList; // the graphical list
-    private Button dialButton; // the button at the top of the app
     private ArrayList<PhoneEntry> entries; // the list data
     private PhoneListAdapter adapter; // used by the ListView to determine how to present the data
     
